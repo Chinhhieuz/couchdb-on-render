@@ -1,2 +1,2 @@
--name couchdb@127.0.0.1
--setcookie couchdbcookie
+-name couchdb@0.0.0.0
+-setcookie monster
