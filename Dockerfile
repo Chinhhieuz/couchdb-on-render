@@ -1,17 +1,8 @@
-FROM couchdb:3.3.3
+FROM apache/couchdb:3.3.2
 
-# Copy cấu hình CouchDB nếu có
-# COPY local.ini /opt/couchdb/etc/local.ini
+# Thiết lập user/password CouchDB (Render sẽ đọc biến môi trường)
+ENV COUCHDB_USER=admin
+ENV COUCHDB_PASSWORD=admin
 
-# Thêm script entrypoint để tạo DB hệ thống
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Tạo thư mục log nếu chưa có
-RUN mkdir -p /opt/couchdb/var/log && chown -R couchdb:couchdb /opt/couchdb/var/log
-
-# Expose cổng CouchDB
+# Mở cổng CouchDB để Render nhận diện dịch vụ
 EXPOSE 5984
-
-# Start script (gọi entrypoint trước rồi chạy couchdb)
-CMD ["bash", "/usr/local/bin/entrypoint.sh"]
