@@ -1,21 +1,17 @@
-FROM apache/couchdb:3.3
+FROM couchdb:3.3.3
 
-# Thiết lập biến môi trường
-ENV COUCHDB_USER=admin \
-    COUCHDB_PASSWORD=chinhhieu01 \
-    NODENAME=couchdb@127.0.0.1 \
-    ERL_FLAGS="-setcookie couchdbcluster -name couchdb@127.0.0.1"
+# Copy cấu hình CouchDB nếu có
+# COPY local.ini /opt/couchdb/etc/local.ini
 
-# Sao chép file cấu hình vào container
-COPY local.ini /opt/couchdb/etc/local.ini
-COPY vm.args /opt/couchdb/etc/vm.args
-COPY entrypoint.sh /entrypoint.sh
+# Thêm script entrypoint để tạo DB hệ thống
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Cấp quyền thực thi cho entrypoint
-RUN chmod +x /entrypoint.sh
+# Tạo thư mục log nếu chưa có
+RUN mkdir -p /opt/couchdb/var/log && chown -R couchdb:couchdb /opt/couchdb/var/log
 
-# Mở cổng CouchDB
+# Expose cổng CouchDB
 EXPOSE 5984
 
-# Khởi chạy entrypoint script
-CMD ["/entrypoint.sh"]
+# Start script (gọi entrypoint trước rồi chạy couchdb)
+CMD ["bash", "/usr/local/bin/entrypoint.sh"]

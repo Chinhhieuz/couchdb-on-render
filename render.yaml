@@ -1,13 +1,13 @@
 services:
   - type: web
-    name: couchdb-on-render
+    name: couchdb
     env: docker
     plan: free
+    repo: https://github.com/your-user/your-couchdb-repo
+    branch: main
     dockerfilePath: ./Dockerfile
     envVars:
       - key: COUCHDB_USER
         value: admin
       - key: COUCHDB_PASSWORD
-        value: chinhhieu01
-    ports:
-      - 5984
+        value: admin
