@@ -1,8 +1,7 @@
-FROM couchdb:latest
+FROM couchdb:3.3
 
 COPY local.ini /opt/couchdb/etc/local.ini
 
-EXPOSE 5984
+CMD ["couchdb", "-setcookie", "monster", "-name", "couchdb@127.0.0.1"]
 
-CMD ["couchdb"]
 
